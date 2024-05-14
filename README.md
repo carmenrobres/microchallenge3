@@ -118,6 +118,7 @@ That led us to our second approach: **Machine Learning**. We created two videos 
 
 1. Utilize our "importcsv.py" code to analyze each video frame-by-frame using MediaPipe. This code saved the position of the body skeleton in each frame to a CSV file, categorizing them as either "AGGRESSIVE" or "NORMAL".
 
+
 ![image](https://hackmd.io/_uploads/H1ZO5MZQR.png)
 
 
@@ -140,6 +141,7 @@ However, three main challenges remained with the model:
 
 
 Finally we sent the data recollected as AGGRESSIVE or NORMAL and % accuracy through osc to TouchDesigner.
+
 ![GIF-2024-05-13-17-43-24](https://github.com/carmenrobres/microchallenge3/assets/145042059/0291c934-8650-43cd-91c8-010a6729b813)
 
 
