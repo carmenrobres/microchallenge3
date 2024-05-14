@@ -234,20 +234,36 @@ APPS:
 
 ### Results & Problems Ecountered
 
-IMAGE COMPARISON OF MOVEMENTS
+In our project, we encountered several issues. 
+- Firstly, the Arduino cameras didn't function properly, which was frustrating. We had to test 4 different cameras until we finally decided to use the phone as a webcam.
+- Additionally, while the Arduino circuit worked initially, it failed to operate when connected to a powerbank. We spent a whole day troubleshooting, trying different Arduinos and components, only to realize it was a simple coding issue. The Arduino was programmed to send messages, but the power bank couldn't interpret them, causing a continuous loop of the same output.
+- Moreover, we faced challenges with machine learning, as it's a complex field, especially for beginners like us. We realized the need to enhance our models by adding more datasets.
+- Another hurdle was encountered with TouchDesigner, where documents weren't saving correctly. This became evident during our presentation when the document failed to open properly. We suspect that the abundance of OSC messages disrupted the program, preventing it from saving correctly.
 
 ### Reflection
+We believe this project encapsulates what we've learned in MDEF so far. It showcases our exploration of wearables, delves into Arduino, and highlights our efforts in device communication—a skill we've been honing throughout the year. This project not only reflects our workflow but also improves certain aspects we hadn't fully addressed in previous microchallenges.
 
+However, there are areas for improvement. While our wearable prototype is a good start, it doesn't evoke the sense of being under surveillance, as some feedback suggested. Additionally, delving into machine learning proved challenging. Understanding it better is crucial, as it's a tool often used in surveillance and thus integral to our critique. Yet, creating a reliable dataset, especially for subjective concepts like aggression, remains difficult.
+
+Despite these challenges, we're satisfied with our exploration. We've learned a great deal, culminating in this final microchallenge where we expanded our knowledge of familiar elements and delved into machine learning, wearables and Touchdesigner.
 
 
 ### Future outcomes & what we could improve
 
-more overwhelming
+1. Enhance Machine Learning: Instead of determining aggression based on individual frames, the tool should understand it as a collective of frames. This would require providing the model with a broader dataset that captures the progression of aggression over multiple frames. Currently, the tool struggles to differentiate between a greeting gesture and a potential threat.
+*These are both considered as aggressive*
+![EXMAPLE](https://hackmd.io/_uploads/BJwevEZ70.jpg)
+
+2. Integrate Facial Recognition: Adding facial recognition would provide valuable context to the assessment of aggression. By analyzing facial expressions, the system could better discern intent. For example, detecting an angry facial expression alongside aggressive body language would raise the likelihood of an imminent attack.
+
+3. Make the Wearable More Impactful: We aim to make the wearable device more dynamic and engaging. One enhancement would be to enable it to receive messages from the machine learning system and change color accordingly when detecting aggression. Additionally, we'd like to augment its visual impact, possibly by adding more cameras or reactive elements to evoke a heightened sense of surveillance and overwhelm. While primarily an artistic reflection tool, the wearable could also serve as a means of self-protection. For instance, it could dispense water as a dissuasion against perceived threats.
+
+4. Improve TouchDesigner Implementation: As relative beginners with TouchDesigner, we acknowledge the need to refine our design to better convey the desired impact. Our goal is to create a more aggressive and impactful visual presentation that aligns with the overarching theme of surveillance and reflection.
 
 
 
 
-### Photograph
+### Final Product
 > []ANNA - picture wearable on
 ![IMG_4076](https://hackmd.io/_uploads/BkBu4ebX0.jpg)
 
