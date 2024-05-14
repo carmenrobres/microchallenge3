@@ -135,6 +135,7 @@ However, three main challenges remained with the model:
 - The training data was collected using a steady camera in a fixed position. This meant that when the model was applied to real-world scenarios where the camera or wearer was in motion, its accuracy decreased.
 - Aggressiveness is not solely determined by individual frames but rather by the overall action. Consequently, the model occasionally misclassified poses because it could not predict subsequent movements, only identifying potentially aggressive poses.
 - Aggressiveness is subjective, making it challenging to detect accurately, as it varies depending on context and interpretation.
+  
 ![GIF-2024-05-13-17-42-27](https://github.com/carmenrobres/microchallenge3/assets/145042059/420c11d3-fa3d-427e-b344-db5eb708ccb5)
 
 
