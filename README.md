@@ -26,7 +26,11 @@ The wearable is going to have a camera and a proximity sensor that detects other
 
 ### Research References
 
-> []ANNA
+Our research focused on finding a piece of clothing that could have different devices on it and at the same time not be hidden: our goal was to make people aware of being recorded and analysed for their movements/behaviors.
+
+![8ee597473e54ce1b265ad643e0b1530f](https://hackmd.io/_uploads/BJNPtBuSA.jpg)
+
+![336b0b8ce596993cb27359a92371f5dc](https://hackmd.io/_uploads/SJVDYH_HA.jpg)
 
 ### Purpose
 
@@ -41,7 +45,10 @@ The wearable is going to have a camera and a proximity sensor that detects other
 
 
 ### Integrated Design
-> []ANNA
+
+The relationship between the elements of the wearable is divided into two categories: the body detection managed by the camera, which we can consider as input; and the corresponding outputs referring to the electronics (proximity sensor, LED stripes and speaker), which reacted to each other based on the data collected from the surroundings.
+Finally, digital visuals were created that could summarise the interaction of all these agents and make clear the level of aggression/non-aggressiveness or proximity of people with respect to the wearable.  Collaboration between all these devices was made possible by OSC messages.
+
 
 
 ### Honest Design
@@ -155,20 +162,182 @@ GIF-2024-05-13-17-43-24
 **Arduino**
 Day 1:
 Create arduino circuit
+To create the inputs, we started by defining an Arduino code that included a proximity sensor, LED stripes, and a speaker.
+The sensor also determined the actions of lights and sound based on the distance between it and any other body within a two-meter radius. We wanted, therefore, the LEDs and sound to interact that would be amplified with the proximity of a person (or more) to the wearable.
+For this reason, the code was structured to increase in intensity with proximity. For the sound, the library pitches.h was used to create a scale of pitches that had higher and higher frequencies, while the LEDs were dimmed when the distance was less than 50 cm.
 
+``` cpp
+#if defined(ESP8266)
+#include <ESP8266WiFi.h>
+#else
+#include <WiFi.h>
+#endif
+#include <WiFiUdp.h>
+#include <OSCMessage.h>
+#include <Adafruit_NeoPixel.h>
+#include "pitches.h";
+
+#ifdef _AVR_
+ #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
+#endif
+const int Trigger = 2;   // Pin digitale 2 per il Trigger del sensore
+const int Echo = 4;      // Pin digitale 4 per l'Echo del sensore
+const int buzzer = 10;
+const int interval = 8;
+const int floor_distance = 50;
+
+#define PIN        7 // On Trinket or Gemma, suggest changing this to 1
+
+char ssid[] = "GL-AR300M-319";              // your network SSID (name)
+char pass[] = "goodlife";  // your network password
+
+WiFiUDP Udp;  // A UDP instance to let us send and receive packets over UDP
+//192.168.1.137
+//const IPAddress outIp(10,40,10,105);        // remote IP of your computer
+const IPAddress outIp(192,168,8,185);
+const unsigned int outPort = 9999;    // remote port to receive OSC ()
+const unsigned int localPort = 8888;  // local port to listen for OSC packets (actually not used for sending)
+#define NUMPIXELS 60 // Popular NeoPixel ring size
+
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+#define DELAYVAL 100 // Time (in milliseconds) to pause between pixels
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(Trigger, OUTPUT);
+  pinMode(Echo, INPUT);
+ // pinMode(smoke, INPUT);
+  pinMode(buzzer, OUTPUT);
+  digitalWrite(Trigger, LOW);
+
+// Connect to WiFi network
+  Serial.println();
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, pass);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  Serial.println("Starting UDP");
+  Udp.begin(localPort);
+  Serial.print("Local port: ");
+#ifdef ESP32
+  Serial.println(localPort);
+#else
+  Serial.println(Udp.localPort());
+#endif
+#if defined(_AVR_ATtiny85_) && (F_CPU == 16000000)
+  clock_prescale_set(clock_div_1);
+#endif
+  // END of Trinket-specific code.
+pixels.begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
+}
+
+void loop() {
+  long t;
+  long d;
+  int pitch = 0;
+
+  digitalWrite(Trigger, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(Trigger, LOW);
+  
+  t = pulseIn(Echo, HIGH);
+  d = t/59;
+  
+  Serial.print("Distance: ");
+  Serial.print(d);
+  Serial.print("cm");
+  Serial.println();
+
+sendingOSC(d);
+if(d < floor_distance) {
+    pitch = NOTE_E1;
+  } else if (d < floor_distance + 1*interval) {
+    pitch = NOTE_F2;
+  } else if (d < floor_distance + 2*interval) {
+    pitch = NOTE_C3;
+  } else if (d < floor_distance + 3*interval) {
+    pitch = NOTE_A3;
+  } else if (d < floor_distance + 4*interval) {
+    pitch = NOTE_D4;
+  } else if (d < floor_distance + 5*interval) {
+    pitch = NOTE_C5;
+  } else if (d < floor_distance + 6*interval) {
+    pitch = NOTE_F5;
+  } else if (d < floor_distance + 7*interval) {
+    pitch = NOTE_D6;
+  }else if (d < floor_distance + 8*interval) {
+    pitch = NOTE_G7;
+  } else {
+    pitch = 0;
+  }
+
+  if(pitch == 0) {
+    noTone(buzzer);
+  } else {
+    tone(buzzer, pitch);
+  }
+
+
+  pixels.clear(); // Set all pixel colors to 'off'
+
+     if (d < floor_distance) {
+
+        int brightness = map(d, 0, floor_distance, 255, 0); // Da 0 a 15 cm, mappa in 255 a 0 (massima a nessuna luminosità)
+        
+        // Accendi i LED con l'intensità calcolata
+        for (int i = 0; i < NUMPIXELS; i++) {
+            pixels.setPixelColor(i, pixels.Color(brightness, 0, 0)); 
+        }
+        pixels.show(); 
+    } else {
+        pixels.clear(); // Spegni tutti i LED
+        pixels.show(); // Invia i colori dei LED all'hardware per spegnerli
+    }
+    delay(DELAYVAL); 
+ }
+ void sendingOSC(long d) {
+  OSCMessage msg("/test");  // The ID of the OSC Message
+  //msg.add("hello, osc!"); // Test hello message
+  msg.add(d);
+  msg.add(1.0);
+  //msg.add(d2); // Send sensor value
+  Udp.beginPacket(outIp, outPort);
+  msg.send(Udp);
+  Udp.endPacket();
+  msg.empty();
+
+}
+```
 Day 2:
 Test wearable
+The Arduino code also send via OSC messages the relative data to the proximity sensor which we later reversed within the touchdesigner file.
+![IMG_1198](https://github.com/carmenrobres/microchallenge3/assets/147055673/9c6086cc-3172-477f-950f-a1ec9fdd4b35)
 
 Day 3: Wearable 
-> []ANNA - explain the process (?)
-
+![IMG_1190](https://github.com/carmenrobres/microchallenge3/assets/147055673/96ddeb9b-adfd-4c86-b919-bf17477b0e54)
+![IMG_1182](https://github.com/carmenrobres/microchallenge3/assets/147055673/7385de57-f016-47d2-966f-abe01da23e16)
+As a wearable, we thought of making a jacket-vest that could contain the electronic parts inside and be easy to wear.
+The jacket was sewn by hand following the classic vest pattern (for women's sizes) and the various inserts for the camera (located on the right side) the proximity sensor, located in the back, and the led strip sewn around the neck were applied to it.
+![image](https://hackmd.io/_uploads/HJ9EEOdSA.png)
 
 
 ---
 
 ### Fabrication process: Wearable
-(How did you fabricate)
-> []ANNA
+![IMG_1190](https://github.com/carmenrobres/microchallenge3/assets/147055673/96ddeb9b-adfd-4c86-b919-bf17477b0e54)
+![IMG_1182](https://github.com/carmenrobres/microchallenge3/assets/147055673/7385de57-f016-47d2-966f-abe01da23e16)
 
 
 ### Digital System
@@ -212,9 +381,10 @@ The last code is the Detection Model. It performs real-time body language predic
 
 
 ### Materials and technologies needed (BOM)
-> []ANNA - make it cuter?
 
-Speaker which one?
+Black fabric
+Wires
+Speaker 8R 0.5W 36mm
 Barduino
 Proximity Sensor
 LED stripe
@@ -264,7 +434,10 @@ Despite these challenges, we're satisfied with our exploration. We've learned a 
 
 
 ### Final Product
-> []ANNA - picture wearable on
+
+![IMG![IMG_1215](https://github.com/carmenrobres/microchallenge3/assets/147055673/b649c93b-cfee-4c75-bf5f-51db527b0939)
+_1214](https://github.com/carmenrobres/microchallenge3/assets/147055673/2cfa9159-d7b8-4a81-b8b0-d67c38e1a230)
+
 ![IMG_4076](https://hackmd.io/_uploads/BkBu4ebX0.jpg)
 
 
