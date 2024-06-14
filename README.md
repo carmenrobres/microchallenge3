@@ -326,8 +326,6 @@ The Arduino code also send via OSC messages the relative data to the proximity s
 ![IMG_1198](https://github.com/carmenrobres/microchallenge3/assets/147055673/9c6086cc-3172-477f-950f-a1ec9fdd4b35)
 
 Day 3: Wearable 
-![IMG_1190](https://github.com/carmenrobres/microchallenge3/assets/147055673/96ddeb9b-adfd-4c86-b919-bf17477b0e54)
-![IMG_1182](https://github.com/carmenrobres/microchallenge3/assets/147055673/7385de57-f016-47d2-966f-abe01da23e16)
 As a wearable, we thought of making a jacket-vest that could contain the electronic parts inside and be easy to wear.
 The jacket was sewn by hand following the classic vest pattern (for women's sizes) and the various inserts for the camera (located on the right side) the proximity sensor, located in the back, and the led strip sewn around the neck were applied to it.
 ![image](https://hackmd.io/_uploads/HJ9EEOdSA.png)
@@ -341,9 +339,8 @@ The jacket was sewn by hand following the classic vest pattern (for women's size
 
 
 ### Digital System
-> []ANNA
+![IMG_1612](https://github.com/carmenrobres/microchallenge3/assets/147055673/3cc7c9fb-827c-45e2-814b-e51a90de1ecd)
 
-(illustration explaining function parts and protocols)
 
 ### Code: Machine Learning
 
@@ -375,7 +372,10 @@ The last code is the Detection Model. It performs real-time body language predic
 
 
 ### TouchDesigner
-> []ANNA
+The touchdesigner file is structured for to the values assigned by the aggressive/non-aggressive camera (0-1) and the distance values translated by the proximity sensor. 
+![Screenshot 2024-06-13 180224](https://github.com/carmenrobres/microchallenge3/assets/147055673/13a015e2-1ef8-4f00-83dd-01ac070d812c)
+The touchdesigner file is structured for to the values assigned by the aggressive/non-aggressive chamber (0-1) and the distance values translated by the proximity sensor. 
+The distance values were utulized as X on the color scale of the visual so that it could change color based on proximity to the sensor while instead the camera data were associated with the shape that becomes more prickly (almost an explosion) when it detects an aggressive attitude
 
 
 
@@ -434,9 +434,8 @@ Despite these challenges, we're satisfied with our exploration. We've learned a 
 
 
 ### Final Product
-
-![IMG![IMG_1215](https://github.com/carmenrobres/microchallenge3/assets/147055673/b649c93b-cfee-4c75-bf5f-51db527b0939)
-_1214](https://github.com/carmenrobres/microchallenge3/assets/147055673/2cfa9159-d7b8-4a81-b8b0-d67c38e1a230)
+![IMG_1214](https://github.com/carmenrobres/microchallenge3/assets/147055673/f791dafc-9c48-424d-a127-2c72237f3433)
+![IMG_1215](https://github.com/carmenrobres/microchallenge3/assets/147055673/fcabf9de-2b00-4e51-af70-16ab7ae18865)
 
 ![IMG_4076](https://hackmd.io/_uploads/BkBu4ebX0.jpg)
 
