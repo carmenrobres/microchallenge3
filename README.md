@@ -152,12 +152,6 @@ Finally we sent the data recollected as AGGRESSIVE or NORMAL and % accuracy thro
 ![GIF-2024-05-13-17-43-24](https://github.com/carmenrobres/microchallenge3/assets/145042059/0291c934-8650-43cd-91c8-010a6729b813)
 
 
-**TouchDesigner**
-
-Once we had all of the INPUTS designed and working, we sent all the info through OSC to touchDesigner....
-**GIF 3** - All together
-GIF-2024-05-13-17-43-24
-
 
 **Arduino**
 Day 1:
